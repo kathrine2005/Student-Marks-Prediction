@@ -1,0 +1,12 @@
+{% extends "base.html" %}{% block title %}StudentIQ | Model Setup{% endblock %}{% block heading %}Set up your <em>prediction model.</em>{% endblock %}
+{% block content %}
+<section class="panel"><div class="step">02 / MODEL CONFIGURATION</div><div class="section-top"><div><h2>Your dataset is ready</h2><p class="muted">Review your data, then select what the model should learn and predict.</p></div><span class="status-chip">● DATA LOADED</span></div>
+ <div class="stats"><div><strong>{{ rows }}</strong><span>STUDENT RECORDS</span></div><div><strong>{{ columns|length }}</strong><span>DATA COLUMNS</span></div></div>
+ <h3>Dataset preview</h3><div class="table-wrap">{{ preview|safe }}</div>
+ <form method="post" class="form-stack">
+  <label>Target column <span class="hint">The value you want to predict</span><select name="target" required>{% for c in columns %}<option value="{{ c }}">{{ c }}</option>{% endfor %}</select></label>
+  <label>Input feature columns <span class="hint">Hold Ctrl (Windows) to select multiple columns</span><select name="features" multiple size="7" required>{% for c in columns %}<option value="{{ c }}">{{ c }}</option>{% endfor %}</select></label>
+  <label>Prediction type<select name="task"><option value="regression">Regression — predict numeric marks</option><option value="classification">Classification — predict grade/category</option></select></label>
+  <button class="button" type="submit">Train machine learning model <span>→</span></button>
+ </form></section>
+{% endblock %}

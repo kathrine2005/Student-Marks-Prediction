@@ -1,0 +1,32 @@
+{% extends "base.html" %}{% block title %}StudentIQ | Predictions{% endblock %}{% block heading %}Your performance <em>insights.</em>{% endblock %}
+{% block content %}
+<section class="panel"><div class="section-top"><div><div class="step">03 / MODEL PERFORMANCE</div><h2>Model trained successfully</h2><p class="muted">Target: <strong>{{ target }}</strong> · Inputs: {{ features|join(", ") }}</p></div><span class="status-chip">✓ MODEL READY</span></div>
+ <div class="metric-grid">{% for name, value in metrics.items() %}<div class="metric"><span>{{ name }}</span><strong>{{ value }}</strong><small>Evaluation result</small></div>{% endfor %}</div>
+</section>
+<section class="panel"><div class="step">04 / MAKE PREDICTIONS</div><h2>Predict using a new dataset</h2><p class="muted">Upload a CSV containing these columns: <strong>{{ features|join(", ") }}</strong>. The target column is not required.</p>
+ <form method="post" enctype="multipart/form-data" class="form-stack"><input type="hidden" name="mode" value="csv"><label class="file-input">Choose prediction CSV<input type="file" name="predict_file" accept=".csv" required></label><button class="button" type="submit">Generate predictions →</button></form></section>
+<section class="panel"><div class="step">05 / INDIVIDUAL PREDICTION</div><h2>Enter one student's details</h2><p class="muted">Fill in the selected feature values below.</p>
+ <form method="post" class="form-stack"><input type="hidden" name="mode" value="manual"><div class="input-grid">{% for c in features %}<label>{{ c }}{% if c in numeric_features %}<input type="number" step="any" name="manual_{{ c }}" placeholder="Enter {{ c }}" required>{% else %}<input type="text" name="manual_{{ c }}" placeholder="Enter {{ c }}" required>{% endif %}</label>{% endfor %}</div><button class="button" type="submit">Predict this student →</button></form></section>
+{% if result %}<section class="panel"><div class="result-heading"><div><div class="step">06 / VISUAL ANALYTICS</div><h2>Prediction dashboard</h2><p class="muted">Explore the predicted values below.</p></div><div class="download-actions">
+    <a class="button secondary" href="{{ url_for('download') }}">Download CSV ↓</a>
+    <a class="button" href="{{ url_for('download_pdf') }}">Download PDF Report ↓</a>
+  </div></div>
+ <div class="chart-grid"><div class="chart-card"><h3>Predicted values</h3><canvas id="predictionBar"></canvas></div><div class="chart-card"><h3>Performance distribution</h3><canvas id="predictionDonut"></canvas></div></div>
+ <h3>Prediction details</h3><div class="table-wrap">{{ result|safe }}</div>
+</section>
+<script>
+const labels = {{ chart_labels|tojson }};
+const values = {{ chart_values|tojson }};
+const numericValues = values.map(Number);
+const isNumeric = numericValues.every(v => Number.isFinite(v));
+if (isNumeric && labels.length) {
+  new Chart(document.getElementById('predictionBar'), {type:'bar',data:{labels:labels,datasets:[{label:'Predicted {{ target|e }}',data:numericValues,backgroundColor:['#7557e8','#4c8bf5','#e66fa8','#37b8a0','#f2ad52'],borderRadius:9,borderSkipped:false}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,grid:{color:'#edf0f7'}},x:{grid:{display:false}}}}});
+  new Chart(document.getElementById('predictionDonut'), {type:'doughnut',data:{labels:['Lower range','Middle range','Higher range'],datasets:[{data:[numericValues.filter(v=>v<40).length,numericValues.filter(v=>v>=40&&v<70).length,numericValues.filter(v=>v>=70).length],backgroundColor:['#f2ad52','#4c8bf5','#7557e8'],borderWidth:0}]},options:{responsive:true,cutout:'68%',plugins:{legend:{position:'bottom'}}}});
+} else {
+  document.getElementById('predictionBar').parentElement.innerHTML='<p class="muted">The bar chart is available for numeric predictions. See the prediction table below for category results.</p>';
+  document.getElementById('predictionDonut').parentElement.innerHTML='<p class="muted">Category predictions are shown in the results table.</p>';
+}
+</script>
+{% endif %}
+<a class="back-link" href="/configure">← Change model settings</a>
+{% endblock %}

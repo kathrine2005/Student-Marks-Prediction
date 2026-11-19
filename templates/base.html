@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Student Marks AI{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<header class="topbar"><a class="brand" href="/"><span class="brand-mark">✦</span> STUDENT<span>IQ</span></a><nav><a href="/">Dashboard</a><a href="/sample">Sample dataset ↓</a></nav></header>
+<main class="container">
+  <div class="intro"><span class="eyebrow">✦ SMART ACADEMIC ANALYTICS</span><h1>{% block heading %}Understand performance. <em>Predict potential.</em>{% endblock %}</h1><p>Transform student data into meaningful insights with machine learning.</p></div>
+  {% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}{% for category, message in messages %}<div class="alert {{ category }}">{{ message }}</div>{% endfor %}{% endif %}{% endwith %}
+  {% block content %}{% endblock %}
+</main>
+<footer><span>STUDENTIQ</span> · Student Marks Prediction Platform · Powered by Flask &amp; Scikit-learn</footer>
+</body></html>

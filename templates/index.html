@@ -1,0 +1,14 @@
+{% extends "base.html" %}{% block title %}StudentIQ | Upload Dataset{% endblock %}
+{% block content %}
+<section class="hero-panel">
+ <div class="hero-copy"><span class="pill">YOUR ML WORKSPACE</span><h2>Turn student data into<br><strong>better decisions.</strong></h2><p>Upload your CSV dataset to train a machine learning model and discover predicted student performance.</p><div class="hero-points"><span>✓ Easy dataset upload</span><span>✓ ML-powered predictions</span><span>✓ Visual analytics</span></div></div>
+ <div class="hero-art"><div class="orb orb-one"></div><div class="orb orb-two"></div><div class="floating-card"><span class="mini-label">PERFORMANCE INSIGHT</span><div class="bars"><i style="height:38%"></i><i style="height:58%"></i><i style="height:48%"></i><i style="height:82%"></i><i style="height:68%"></i><i style="height:96%"></i></div><div class="trend">↗ Data to insight</div></div><div class="sparkle">✦</div></div>
+</section>
+<section class="panel upload-panel"><div class="section-top"><div><div class="step">01 / GET STARTED</div><h2>Upload your student dataset</h2><p class="muted">Choose a CSV file from your computer. Make sure it contains at least two columns.</p></div><span class="file-badge">CSV FILE</span></div>
+ <form method="post" enctype="multipart/form-data" class="upload-form">
+  <label class="dropzone"><span class="upload-icon">↑</span><strong>Choose your CSV file</strong><small>Click to browse · CSV format only</small><input type="file" name="dataset" accept=".csv" required></label>
+  <button class="button" type="submit">Upload dataset <span>→</span></button>
+ </form><div class="sample-link">Don't have a dataset yet? <a href="/sample">Download our sample CSV</a></div>
+</section>
+<section class="feature-grid"><article><div class="feature-icon violet">▤</div><b>01</b><h3>Explore your data</h3><p>Preview records and choose the columns that matter for your prediction.</p></article><article><div class="feature-icon blue">⌁</div><b>02</b><h3>Train your model</h3><p>Build a Random Forest model and review its evaluation metrics.</p></article><article><div class="feature-icon pink">◉</div><b>03</b><h3>Visualize results</h3><p>Predict student marks and explore results through interactive charts.</p></article></section>
+{% endblock %}
